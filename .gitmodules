@@ -1,0 +1,3 @@
+[submodule "WritingView"]
+	path = WritingView
+	url = git@github.com:pauldambra/WritingView.git
