@@ -5,6 +5,7 @@ import java.io.IOException;
 import images.ImageLoader;
 
 import org.sleepyparents.littleletters.R;
+import org.sleepyparents.littleletters.events.WritingFinishedListener;
 import org.sleepyparents.littleletters.views.BezierCurveWritingView;
 
 import roboguice.activity.RoboActivity;
@@ -18,7 +19,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends RoboActivity {
+public class MainActivity extends RoboActivity implements WritingFinishedListener {
 	@Inject ImageLoader imageLoader;
 	@InjectView(R.id.letter_image_view) ImageView letterImageView;	
 	@InjectView(R.id.writing_view) BezierCurveWritingView writingView;
@@ -28,8 +29,27 @@ public class MainActivity extends RoboActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		getLetterImage();
+		writingView.addListener(this);
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		writingView.addListener(this);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		writingView.removeListener(this);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		writingView.removeListener(this);
+	}
+		
 	private void getLetterImage() {
 		try {
 			letterImageView.setImageDrawable(imageLoader.getImageDrawable(this));
@@ -57,5 +77,10 @@ public class MainActivity extends RoboActivity {
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	}
+
+	@Override
+	public void writingFinished() {
+		Toast.makeText(this, "THE MAGIC HAPPENS NOW", Toast.LENGTH_SHORT).show();
 	}
 }
