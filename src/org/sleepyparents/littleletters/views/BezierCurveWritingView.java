@@ -138,12 +138,13 @@ public class BezierCurveWritingView extends View {
 						historicalX, historicalY);
 				lastTouchPointX = historicalX;
 				lastTouchPointY = historicalY;
-				// update the handler delay to notify listeners of TouchFinished
-				restartTouchFinishedCountdown();
+
 			}
 
 			// After replaying history, connect the line to the touch point.
 			getCubicBezierPath(lastTouchPointX, lastTouchPointY, eventX, eventY);
+			// update the handler delay to notify listeners of TouchFinished
+			restartTouchFinishedCountdown();
 			break;
 
 		default:
